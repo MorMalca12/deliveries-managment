@@ -1,0 +1,19 @@
+
+   [
+    {
+      "startTime":"2022-07-12 11:30",
+      "endTime":"2022-07-12 14:30",
+      "supportedCountry": "Israel"
+    },
+    {
+      "startTime":"2022-08-12 11:30",
+      "endTime":"2022-08-12 14:30",
+      "supportedCountry": "Brazil"
+    },
+    {
+      "startTime":"2022-09-12 11:30",
+      "endTime":"2022-09-12 14:30",
+      "supportedCountry": "France"
+    }
+
+  ]
