@@ -2,15 +2,15 @@ package com.dropit.deliveriesmanagment.delivery.models;
 
 import com.dropit.deliveriesmanagment.util.DateParser;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
-public class TimeSlot {
+public class Timeslot {
     @Id
     @GeneratedValue
     private Long id;
@@ -20,18 +20,31 @@ public class TimeSlot {
     private LocalDateTime endTime;
     private String supportedCountry;
 
+    @OneToMany(mappedBy = "timeslot", cascade = CascadeType.ALL)
+    private List<Delivery> deliveries = new ArrayList<>();
+
+
     private boolean occupied = false;
 
-    public TimeSlot(LocalDateTime startTime, LocalDateTime endTime, String supportedCountry, boolean occupied) {
+    public Timeslot(LocalDateTime startTime, LocalDateTime endTime, String supportedCountry, List<Delivery> deliveries, boolean occupied) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.supportedCountry = supportedCountry;
+        this.deliveries = deliveries;
         this.occupied = occupied;
     }
 
 
-    public TimeSlot() {
+    public Timeslot() {
 
+    }
+
+    public List<Delivery> getDeliveries() {
+        return deliveries;
+    }
+
+    public void setDeliveries(List<Delivery> deliveries) {
+        this.deliveries = deliveries;
     }
 
     public LocalDateTime getStartTime() {

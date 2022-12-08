@@ -2,7 +2,7 @@ package com.dropit.deliveriesmanagment.delivery.repositories;
 
 import com.dropit.deliveriesmanagment.delivery.models.Delivery;
 import com.dropit.deliveriesmanagment.delivery.enums.Status;
-import com.dropit.deliveriesmanagment.delivery.models.TimeSlot;
+import com.dropit.deliveriesmanagment.delivery.models.Timeslot;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -14,11 +14,11 @@ import java.util.List;
 
 @Repository
 public interface DeliveryRepository extends JpaRepository<Delivery,Long> {
-    long countDeliveryDtoByTimeSlot(TimeSlot timeslot);
+    long countDeliveryByTimeslot(Timeslot timeslot);
 
-    List<Delivery> findDeliveriesByTimeSlotIn(List<TimeSlot> timeslots);
+    List<Delivery> findDeliveriesByTimeslotIn(List<Timeslot> timeslots);
 
-    int countDeliveriesByTimeSlotIn(List<TimeSlot> timeslots);
+    int countDeliveriesByTimeslotIn(List<Timeslot> timeslots);
     @Modifying
     @Query("update Delivery d set d.status = :status where d.id = :id")
     void updateStatus(@Param(value = "id") long id, @Param(value = "status") Status status);

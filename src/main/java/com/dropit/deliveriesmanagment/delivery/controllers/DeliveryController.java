@@ -3,7 +3,7 @@ package com.dropit.deliveriesmanagment.delivery.controllers;
 import com.dropit.deliveriesmanagment.delivery.dto.*;
 import com.dropit.deliveriesmanagment.delivery.enums.Status;
 import com.dropit.deliveriesmanagment.delivery.models.Delivery;
-import com.dropit.deliveriesmanagment.delivery.models.TimeSlot;
+import com.dropit.deliveriesmanagment.delivery.models.Timeslot;
 import com.dropit.deliveriesmanagment.delivery.services.DeliveryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +27,7 @@ public class DeliveryController {
     }
 
     @PostMapping("/timeslots")
-    public List<TimeSlot> retrieveAvailableTimeSlots(@RequestBody AddressDto address) {
+    public List<Timeslot> retrieveAvailableTimeSlots(@RequestBody AddressDto address) {
         return deliveryService.getAvailableTimeSlots(address);
     }
 

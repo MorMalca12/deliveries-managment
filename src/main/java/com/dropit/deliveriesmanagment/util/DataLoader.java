@@ -1,6 +1,6 @@
 package com.dropit.deliveriesmanagment.util;
 
-import com.dropit.deliveriesmanagment.delivery.models.TimeSlot;
+import com.dropit.deliveriesmanagment.delivery.models.Timeslot;
 import com.dropit.deliveriesmanagment.delivery.repositories.TimeSlotRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -43,32 +43,32 @@ public class DataLoader implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
-        List<TimeSlot> availableTimeSlots = getAvailableTimeSlots();
-        timeSlotRepository.saveAll(availableTimeSlots);
+        List<Timeslot> availableTimeslots = getAvailableTimeSlots();
+        timeSlotRepository.saveAll(availableTimeslots);
 
     }
 
-    private List<TimeSlot> getAvailableTimeSlots() throws Exception {
-        List<TimeSlot> timeSlots = fetchAvailableTimeSlots().get();
+    private List<Timeslot> getAvailableTimeSlots() throws Exception {
+        List<Timeslot> timeslots = fetchAvailableTimeSlots().get();
         List<LocalDate> forbiddenDates = fetchForbiddenDates().get();
-        for (TimeSlot timeSlot : timeSlots) {
+        for (Timeslot timeSlot : timeslots) {
             for (LocalDate forbiddenDate : forbiddenDates) {
                 if (compareDateToDateTime(timeSlot.getStartTime(), forbiddenDate) ||
                         compareDateToDateTime(timeSlot.getEndTime(), forbiddenDate)) {
-                    timeSlots.remove(timeSlot);
+                    timeslots.remove(timeSlot);
                     break;
                 }
             }
         }
 
-        return timeSlots;
+        return timeslots;
     }
 
     @Async
-    Future<List<TimeSlot>> fetchAvailableTimeSlots() throws Exception {
+    Future<List<Timeslot>> fetchAvailableTimeSlots() throws Exception {
         String file = "src/main/resources/static/AvailableTimeSlots.json";
         String json = readFileAsString(file);
-        return CompletableFuture.completedFuture(Arrays.asList(objectMapper.readValue(json, TimeSlot[].class)));
+        return CompletableFuture.completedFuture(Arrays.asList(objectMapper.readValue(json, Timeslot[].class)));
 
     }
 

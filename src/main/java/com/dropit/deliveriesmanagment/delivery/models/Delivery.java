@@ -11,26 +11,26 @@ public class Delivery {
     @Id
     @GeneratedValue
     private long id;
-    @OneToOne(cascade= CascadeType.ALL)//one-to-one
+    @ManyToOne()
     @JoinColumn(name="TIME_SLOT_ID")
-    private TimeSlot timeSlot;
+    private Timeslot timeslot;
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    public Delivery(TimeSlot timeSlot, Status status) {
-        this.timeSlot = timeSlot;
+    public Delivery(Timeslot timeSlot, Status status) {
+        this.timeslot = timeSlot;
         this.status = status;
     }
 
     public Delivery() {
     }
 
-    public TimeSlot getTimeSlot() {
-        return timeSlot;
+    public Timeslot getTimeSlot() {
+        return timeslot;
     }
 
-    public void setTimeSlot(TimeSlot timeSlot) {
-        this.timeSlot = timeSlot;
+    public void setTimeSlot(Timeslot timeSlot) {
+        this.timeslot = timeSlot;
     }
 
     public Status getStatus() {
