@@ -1,12 +1,14 @@
 package com.dropit.deliveriesmanagment.delivery.services;
 
 
-import com.dropit.deliveriesmanagment.delivery.dto.*;
+import com.dropit.deliveriesmanagment.delivery.dto.AddressDto;
+import com.dropit.deliveriesmanagment.delivery.dto.BookDeliveryDto;
 import com.dropit.deliveriesmanagment.delivery.enums.Status;
 import com.dropit.deliveriesmanagment.delivery.models.Delivery;
 import com.dropit.deliveriesmanagment.delivery.models.Timeslot;
 import com.dropit.deliveriesmanagment.delivery.repositories.DeliveryRepository;
 import com.dropit.deliveriesmanagment.delivery.repositories.TimeSlotRepository;
+import com.dropit.deliveriesmanagment.util.LockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +16,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.concurrent.locks.Lock;
 
 @Service
 public class DeliveryService {
@@ -47,12 +47,12 @@ public class DeliveryService {
         return timeSlotRepository.findBySupportedCountryAndOccupied(address.getCountry(), false);
     }
 
-    private Set<Long> activeTimeslotsBooking = new HashSet<>();
 
     public void bookDelivery(BookDeliveryDto bookDeliveryDto) {
         long timeslotId = bookDeliveryDto.getTimeslotId();
 
-        signAsActiveBooking(timeslotId);
+        Lock timeslotLock = LockService.getLock(String.valueOf(timeslotId));
+        timeslotLock.lock();
 
         Timeslot timeslot = timeSlotRepository.findById(timeslotId).get();
 
@@ -77,25 +77,10 @@ public class DeliveryService {
 
             timeSlotRepository.save(timeslot);
         }finally {
-            signOfFromBooking(timeslotId);
+            timeslotLock.unlock();
+            LockService.removeLock(String.valueOf(timeslotId));
         }
 
-    }
-
-    private synchronized void signAsActiveBooking(long timeslotId) {
-        if (activeTimeslotsBooking.contains(timeslotId)) {
-            try {
-                Thread.sleep(2000); //TODO : should handle it more properly
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        } else {
-            activeTimeslotsBooking.add(timeslotId);
-        }
-    }
-
-    private synchronized void signOfFromBooking(long timeslotId) {
-        activeTimeslotsBooking.remove(timeslotId);
     }
 
 

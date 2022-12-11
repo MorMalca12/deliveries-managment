@@ -48,6 +48,8 @@ public class DeliveryController {
 
     @GetMapping("/deliveries/daily")
     public List<Delivery> getTodayDeliveries() {
+        List<Delivery> list = deliveryService.getTodaysDeliveries();
+
         return deliveryService.getTodaysDeliveries();
     }
 

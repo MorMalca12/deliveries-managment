@@ -1,6 +1,7 @@
 package com.dropit.deliveriesmanagment.delivery.models;
 
 import com.dropit.deliveriesmanagment.util.DateParser;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
 
@@ -20,6 +21,7 @@ public class Timeslot {
     private LocalDateTime endTime;
     private String supportedCountry;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "timeslot", cascade = CascadeType.ALL)
     private List<Delivery> deliveries = new ArrayList<>();
 
